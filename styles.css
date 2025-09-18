@@ -1,0 +1,161 @@
+/* Reset */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: Arial, sans-serif;
+}
+
+body {
+   background: #f6f8fa;
+   color: #333;
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   min-height: 100vh;
+   padding: 40px 20px;
+}
+
+.container {
+   background: #fff;
+   padding: 30px;
+   border-radius: 12px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+   /* ✅ Responsive width */
+   width: 100%;
+   max-width: 800px;
+   min-width: 280px;
+}
+
+h1 {
+   text-align: center;
+   margin-bottom: 20px;
+   color: #444;
+   font-size: clamp(1.4rem, 2.5vw, 1.8rem); /* scales text */
+}
+
+.cookie-form {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr auto;
+   gap: 10px;
+   margin-bottom: 20px;
+}
+
+.cookie-form input,
+.cookie-form button {
+   padding: 10px;
+   border-radius: 6px;
+   border: 1px solid #ccc;
+   font-size: 0.95rem;
+}
+
+.cookie-form button {
+   background: #4caf50;
+   color: #fff;
+   border: none;
+   cursor: pointer;
+   transition: 0.3s;
+}
+
+.cookie-form button:hover {
+   background: #43a047;
+}
+
+.actions {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 20px;
+   flex-wrap: wrap;
+   gap: 10px;
+}
+
+.actions button {
+   flex: 1;
+   padding: 10px;
+   border-radius: 6px;
+   border: none;
+   cursor: pointer;
+   transition: 0.3s;
+   font-size: 0.95rem;
+}
+
+#showCookiesBtn {
+   background: #2196f3;
+   color: #fff;
+}
+
+#showCookiesBtn:hover {
+   background: #1976d2;
+}
+
+#clearCookiesBtn {
+   background: #f44336;
+   color: #fff;
+}
+
+#clearCookiesBtn:hover {
+   background: #d32f2f;
+}
+
+.cookie-list {
+   background: #fafafa;
+   padding: 15px;
+   border: 1px solid #ddd;
+   border-radius: 8px;
+   min-height: 60px;
+   font-size: 14px;
+   line-height: 1.6;
+}
+
+/* ========================= */
+/* Responsive Design         */
+/* ========================= */
+
+/* Medium screens (tablets/laptops) */
+@media (max-width: 900px) {
+   .container {
+      max-width: 90%;
+      padding: 20px;
+   }
+
+   .cookie-form {
+      grid-template-columns: 1fr 1fr;
+   }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 500px) {
+   body {
+      padding: 20px 10px;
+   }
+
+   .container {
+      max-width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+   }
+
+   .cookie-form {
+      grid-template-columns: 1fr;
+   }
+
+   .cookie-form input,
+   .cookie-form button {
+      width: 100%;
+      font-size: 1rem;
+   }
+
+   .actions {
+      flex-direction: column;
+   }
+
+   .actions button {
+      width: 100%;
+      margin: 5px 0;
+   }
+
+   h1 {
+      font-size: 1.2rem;
+   }
+}
