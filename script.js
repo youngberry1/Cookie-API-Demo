@@ -1,3 +1,4 @@
+// --- Global cookieStore support check ---
 const supportsCookieStore = (
   'cookieStore' in window &&
   typeof cookieStore.set === 'function' &&
@@ -62,33 +63,19 @@ async function setCookie() {
   cookieDays.value = '';
 }
 
-//Setting Up Cookie By passing in setCookie function
-document.getElementById('setCookieBtn').addEventListener('click', setCookie);
 
 
 
-//handling Keydown
-function handleKeydown(e) {
-  if (e.key === 'Enter') {
-    setCookie();
-  }
-}
-document.getElementById('cookieValue').addEventListener('keydown', handleKeydown);
-document.getElementById('cookieName').addEventListener('keydown', handleKeydown);
-document.getElementById('cookieDays').addEventListener('keydown', handleKeydown);
-
-
-
-//Handling Displaying Of Cookie Lists
+// --- Show Cookies Function ---
 async function showCookies() {
   const list = document.getElementById('cookieList');
   list.innerHTML = '';
 
   if (supportsCookieStore) {
-    //Modern API
+    // Modern API
     const cookies = await cookieStore.getAll();
     if (cookies.length === 0) {
-      list.textContent = 'No cookies found.';
+      list.textContent = 'No Cookies found.';
       list.style.color = 'red';
       list.style.textAlign = 'center';
       return;
@@ -96,8 +83,8 @@ async function showCookies() {
     cookies.forEach(cookie => {
       const div = document.createElement('div');
       div.textContent = `Name: ${cookie.name} = Value: ${cookie.value}`;
-      list.style.textAlign = 'center';
-      list.style.color = 'green';
+      div.style.color = 'green';
+      div.style.textAlign = 'center';
       list.appendChild(div);
     });
   } else {
@@ -108,24 +95,32 @@ async function showCookies() {
       list.style.textAlign = 'center';
       return;
     }
-    document.cookie.split(';').forEach(c => {
-      const [name, value] = c.split('=');
-      const div = document.createElement('div');
-      div.textContent = `Name: ${decodeURIComponent(name.trim())} = Value: ${decodeURIComponent((value || '').trim())}`;
+    const cookies = document.cookie.split(';')
+      .map(c => {
+        const [name, value] = c.split('=');
+        return { name: name.trim(), value: value ? value.trim() : '' };
+      })
+      .filter(cookie => cookie.name && cookie.value);
+
+    if (cookies.length === 0) {
+      list.textContent = 'No Cookies found.';
+      list.style.color = 'red';
       list.style.textAlign = 'center';
+      return;
+    }
+
+    cookies.forEach(cookie => {
+      const div = document.createElement('div');
+      div.textContent = `Name: ${decodeURIComponent(cookie.name)} = Value: ${decodeURIComponent(cookie.value)}`;
       div.style.color = 'green';
+      div.style.textAlign = 'center';
       list.appendChild(div);
     });
   }
 }
 
 
-//Displaying cookie
-document.getElementById('showCookiesBtn').addEventListener('click', showCookies);
-
-
-//Clearing Cookies
-
+// --- Clear Cookies Function ---
 async function clearCookies() {
   if (supportsCookieStore) {
     const cookies = await cookieStore.getAll();
@@ -133,17 +128,35 @@ async function clearCookies() {
       await cookieStore.delete(cookie.name);
     }
   } else {
-    // Parse document.cookie and expire them
+    // Parse document.cookie and expire them aggressively
     document.cookie.split(';').forEach(c => {
       const name = c.split('=')[0].trim();
-      document.cookie = `${name}=; expires=Thu, 01 JAN 1970 00:00:00 GMT; path=/`;
-    })
+      if (!name) return;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; max-age=0; path=/`;
+    });
   }
 
   const list = document.getElementById('cookieList');
   list.textContent = "All cookies cleared.";
   list.style.color = 'red';
+  list.style.textAlign = 'center';
   setTimeout(() => list.textContent = '', 3000);
 }
 
+
+// --- Event Listeners ---
+document.getElementById('showCookiesBtn').addEventListener('click', showCookies);
 document.getElementById('clearCookiesBtn').addEventListener('click', clearCookies);
+document.getElementById('setCookieBtn').addEventListener('click', setCookie);
+
+
+
+//--- Handling Keydown On Inputs ---
+function handleKeydown(e) {
+  if (e.key === 'Enter') {
+    setCookie();
+  }
+}
+document.getElementById('cookieValue').addEventListener('keydown', handleKeydown);
+document.getElementById('cookieName').addEventListener('keydown', handleKeydown);
+document.getElementById('cookieDays').addEventListener('keydown', handleKeydown);
