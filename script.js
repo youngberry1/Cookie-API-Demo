@@ -43,7 +43,7 @@ async function setCookie() {
     })
   } else {
     // ✅ Fallback API
-    const cookieStr = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+    let cookieStr = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
     if (expiresDate) {
       cookieStr += `; expires=${expiresDate.toUTCString()}`;
     }
