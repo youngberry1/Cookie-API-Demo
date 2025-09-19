@@ -89,6 +89,7 @@ async function showCookies() {
     const cookies = await cookieStore.getAll();
     if (cookies.length === 0) {
       list.textContent = 'No cookies found.';
+      list.style.color = 'red';
       list.style.textAlign = 'center';
       return;
     }
@@ -103,6 +104,8 @@ async function showCookies() {
     //Fallback API
     if (!document.cookie) {
       list.textContent = 'No Cookies found.';
+      list.style.color = 'red';
+      list.style.textAlign = 'center';
       return;
     }
     document.cookie.split(';').forEach(c => {
@@ -139,6 +142,7 @@ async function clearCookies() {
 
   const list = document.getElementById('cookieList');
   list.textContent = "All cookies cleared.";
+  list.style.color = 'red';
   setTimeout(() => list.textContent = '', 3000);
 }
 
