@@ -1,3 +1,10 @@
+const supportsCookieStore = (
+  'cookieStore' in window &&
+  typeof cookieStore.set === 'function' &&
+  typeof cookieStore.getAll === 'function' &&
+  typeof cookieStore.delete === 'function'
+);
+
 async function setCookie() {
   const cookieName = document.getElementById('cookieName');
   const cookieValue = document.getElementById('cookieValue');
@@ -25,7 +32,9 @@ async function setCookie() {
     expiresDate.setDate(expiresDate.getDate() + days);
   }
 
-  if ('cookieStore' in window) {
+
+
+  if (supportsCookieStore) {
     await cookieStore.set({
       name,
       value,
@@ -75,7 +84,7 @@ async function showCookies() {
   const list = document.getElementById('cookieList');
   list.innerHTML = '';
 
-  if ('cookieStore' in window) {
+  if (supportsCookieStore) {
     //Modern API
     const cookies = await cookieStore.getAll();
     if (cookies.length === 0) {
@@ -115,7 +124,7 @@ document.getElementById('showCookiesBtn').addEventListener('click', showCookies)
 //Clearing Cookies
 
 async function clearCookies() {
-  if ('cookieStore' in window) {
+  if (supportsCookieStore) {
     const cookies = await cookieStore.getAll();
     for (const cookie of cookies) {
       await cookieStore.delete(cookie.name);
